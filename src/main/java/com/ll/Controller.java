@@ -7,7 +7,6 @@ import java.util.Scanner;
 class Controller {
     public int run(int lastId){
         Scanner scanner = new Scanner(System.in);
-        List<WiseSaying> list = new ArrayList<>();
         Service service = new Service();
         while (true) {
             System.out.print("명령) ");
@@ -61,8 +60,15 @@ class Controller {
                         번호 / 작가 / 명언
                         ----------------------
                         """);
-                String str = service.printAllDesc();
-                System.out.print(str);
+                List<String> list = service.jsonDesc();
+                for(String str : list){
+                    System.out.println(str);
+                }
+            }
+
+            else if (cmd.equals("빌드")){
+                service.buildData();
+                System.out.println("data.json 파일의 내용이 갱신되었습니다.");
             }
         }
         scanner.close();

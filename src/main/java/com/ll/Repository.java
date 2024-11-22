@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 
 public class Repository {
     static String filePath = "src/db/wiseSaying/";
+    static String DataJson = "data.json";
 
     void saveFile(String fileName, String content){
         try{
@@ -82,5 +83,10 @@ public class Repository {
             }
         }
         return i;
+    }
+
+    String makeJsonName(int id){
+        String fileName = id + ".json";
+        return fileName;
     }
 }
