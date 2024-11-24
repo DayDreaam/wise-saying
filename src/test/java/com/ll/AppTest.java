@@ -3,10 +3,11 @@ package com.ll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
 
-import static com.ll.TestUtil.genScanner;
-import static com.ll.TestUtil.setOutToByteArray;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AppTest {
@@ -32,16 +33,20 @@ class AppTest {
                 빌드
                 종료
                 """;
-        // 이부분을  어떻게 처리해야할지 모르겠습니다.
-        // App에서 Controller를 불러 scanner를 사용하는데
-        // 이럴땐 스캐너를 어떻게 넘겨줘야 하는지 모르겠습니다.
-        genScanner(in);
 
-        ByteArrayOutputStream output = setOutToByteArray();
+        // 원래의 output 스트림을 저장
+        PrintStream originalOut = System.out;
+        // 새로운 output을 저장할 스트림 생성
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        // output을 새로 생성한 스트림에 캡처 (설정?)
+        System.setOut(new PrintStream(outStream));
+
+        InputStream out = new ByteArrayInputStream(in.getBytes());
+        System.setIn(out);
+
         app.run();
-        String out = output.toString();
 
-        assertThat(out)
+        assertThat(outStream.toString())
                 .contains("== 명언 앱 ==")
                 .contains("명령) ")
                 .contains("명언 : ")
@@ -75,3 +80,16 @@ class AppTest {
     }
 
 }
+
+//import static com.ll.TestUtil.genScanner;
+//import static com.ll.TestUtil.setOutToByteArray;
+
+// 38 line
+//        // 이부분을  어떻게 처리해야할지 모르겠습니다.
+//        // App에서 Controller를 불러 scanner를 사용하는데
+//        // 이럴땐 스캐너를 어떻게 넘겨줘야 하는지 모르겠습니다.
+//        genScanner(in);
+//
+//        ByteArrayOutputStream output = setOutToByteArray();
+//        app.run();
+//        String out = output.toString();

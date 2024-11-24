@@ -42,4 +42,7 @@ bin/
 .DS_Store
 
 ### DB ###
-/src/db/
+db/
+
+### Study ###
+Study.java
