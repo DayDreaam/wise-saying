@@ -45,4 +45,4 @@ bin/
 db/
 
 ### Study ###
-/com.ll/Study.java
+/src/main/java/com.ll/Study.java
