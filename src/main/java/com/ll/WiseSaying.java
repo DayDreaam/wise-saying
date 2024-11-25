@@ -9,4 +9,12 @@ class WiseSaying {
         this.content = content;
         this.author = author;
     }
+
+    String getContent(){
+        return this.content;
+    }
+
+    String getAuthor(){
+        return this.author;
+    }
 }

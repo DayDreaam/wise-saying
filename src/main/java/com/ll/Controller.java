@@ -7,11 +7,12 @@ class Controller {
     Scanner scanner = new Scanner(System.in);
     Service service = new Service();
     int lastId;
+
     Controller(int lastId){
         this.lastId = lastId;
     }
 
-    public int run(){
+    public void run(){
         while (true) {
             System.out.print("명령) ");
             String cmd = scanner.nextLine();
@@ -35,7 +36,6 @@ class Controller {
             }
         }
         scanner.close();
-        return lastId;
     }
 
     void upload(){
@@ -47,6 +47,7 @@ class Controller {
         WiseSaying wiseSaying = new WiseSaying(lastId, content, author);
 
         service.createWiseSaying(wiseSaying);
+        service.saveLastId(lastId);
         System.out.println("%d번 명언이 등록되었습니다.".formatted(lastId));
     }
 
@@ -61,9 +62,9 @@ class Controller {
     void update(int id){
         if(service.updatable(id)){
             WiseSaying wiseSaying = service.readWiseSaying(id);
-            System.out.print("명언(기존) : %s\n명언 : ".formatted(wiseSaying.content));
+            System.out.print("명언(기존) : %s\n명언 : ".formatted(wiseSaying.getContent()));
             String content = scanner.nextLine();
-            System.out.print("작가(기존) : %s\n작가 : ".formatted(wiseSaying.author));
+            System.out.print("작가(기존) : %s\n작가 : ".formatted(wiseSaying.getAuthor()));
             String author = scanner.nextLine();
             wiseSaying = new WiseSaying(id, content, author);
             service.updateWiseSaying(wiseSaying);
@@ -73,16 +74,23 @@ class Controller {
         }
     }
 
-    // 추후 페이징 추가해야함.
     void read(String cmd){
         if(cmd.length()>2){
-            String keywordType = cmd.split("=")[1].split("&")[0];
-            String keyword = cmd.split("=")[2];
-            List<String> list = service.keywordListDesc(keywordType, keyword);
-            System.out.println("----------------------");
-            System.out.println("검색타입 : %s".formatted(keywordType));
-            System.out.println("검색어 : %s".formatted(keyword));
-            service.printList(list);
+            String readMenu = cmd.split("\\?")[1].split("=")[0];
+            if(readMenu.equals("keywordType")){
+                String keywordType = cmd.split("=")[1].split("&")[0];
+                String keyword = cmd.split("=")[2];
+                List<String> list = service.keywordListDesc(keywordType, keyword);
+                System.out.println("----------------------");
+                System.out.println("검색타입 : %s".formatted(keywordType));
+                System.out.println("검색어 : %s".formatted(keyword));
+                service.pageView(list,1);
+                // TODO 페이지 넘버 입력받는 경우 ...
+            }
+            else{ // equals page
+                int pageNo = Integer.parseInt(cmd.split("=")[1]);
+                service.pageView(service.jsonDesc(),pageNo);
+            }
         }
         else{
             service.pageView(service.jsonDesc(),1);

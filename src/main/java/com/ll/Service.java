@@ -136,7 +136,7 @@ public class Service {
             System.out.println("번호 / 작가 / 명언");
             System.out.println("----------------------");
             for(int i=0; i<5;i++){
-                int l = (page-1) * 5 + i;
+                int l = (pageNo-1) * 5 + i;
                 if(l >= list.size()) break;
                 System.out.println(list.get(l));
             }
@@ -162,5 +162,9 @@ public class Service {
         else{
             System.out.print(" %d".formatted(page));
         }
+    }
+
+    void saveLastId(int lastId){
+        repository.saveFile("lastId.txt",String.valueOf(lastId));
     }
 }

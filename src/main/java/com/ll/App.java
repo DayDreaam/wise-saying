@@ -6,7 +6,6 @@ class App {
         System.out.println("== 명언 앱 ==");
         int lastId = repository.lastNumber();
         Controller controller = new Controller(lastId);
-        lastId = controller.run();
-        repository.saveFile("lastId.txt",String.valueOf(lastId));
+        controller.run();
     }
 }
